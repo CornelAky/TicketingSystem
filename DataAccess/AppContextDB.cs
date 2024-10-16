@@ -9,10 +9,6 @@ namespace TicketingSystem.DataAccess
         {
 
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(@"Data Source=(localdb)\AcademyLocalDB;Initial Catalog=TicketSystemDB;persist security info=True;Integrated Security=SSPI;");
-        //}
         public DbSet<User> Users { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketStatus> TicketStatuses { get; set; }
@@ -25,6 +21,15 @@ namespace TicketingSystem.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region Unique
+
+            modelBuilder.Entity<Plan>()
+                   .HasIndex(p => p.PlanName)
+                   .IsUnique()
+                   .HasDatabaseName("IX_Plan_PlanName");
+
+            #endregion
+
             #region PrimaryKey
 
             modelBuilder.Entity<User>()

@@ -142,19 +142,25 @@ namespace TicketingSystem.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("MaxTicketsPerMonth")
                         .HasColumnType("int");
 
                     b.Property<string>("PlanName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.HasKey("PlanId");
+
+                    b.HasIndex("PlanName")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Plan_PlanName");
 
                     b.ToTable("Plans");
                 });
@@ -233,7 +239,7 @@ namespace TicketingSystem.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Ticket");
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("TicketingSystem.Models.TicketStatus", b =>
@@ -270,7 +276,7 @@ namespace TicketingSystem.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("TicketingSystem.Models.Comment", b =>

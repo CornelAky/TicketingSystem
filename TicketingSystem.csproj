@@ -19,6 +19,11 @@
     <PackageReference Include="Microsoft.Identity.Web" Version="2.19.1" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.19.1" />
     <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="2.15.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
