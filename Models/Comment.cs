@@ -4,14 +4,12 @@ namespace TicketingSystem.Models
 {
     public class Comment
     {
-        public int CommentId { get; set; }
-        public int TicketId { get; set; }
-        public int UserId { get; set; }
+        public long CommentId { get; set; }
+        public long TicketId { get; set; }
+        public long UserId { get; set; }
         public string CommentText { get; set; }
         public DateTime CreatedDate { get; set; }
-        [NotMapped]
         public User User { get; set; }
-        [NotMapped]
         public Ticket Ticket { get; set; }
     }
 }

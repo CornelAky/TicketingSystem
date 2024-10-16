@@ -9,7 +9,6 @@ namespace TicketingSystem.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public int Status { get; set; } // Enum
-        [NotMapped]
         public User User { get; set; }
     }
 }

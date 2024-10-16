@@ -7,28 +7,29 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 
 using System;
-
-using TicketingSystem.Models;
+using TicketingSystem.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = @"Data Source=(localdb)\AcademyLocalDB;Initial Catalog=TicketSystemDB;persist security info=True;Integrated Security=SSPI;";
+
 builder.Services.AddDbContext<AppContextDB>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 
-// Add services to the container.
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+//// Add services to the container.
+//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
-builder.Services.AddControllersWithViews(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-});
-builder.Services.AddRazorPages()
-    .AddMicrosoftIdentityUI();
+//builder.Services.AddControllersWithViews(options =>
+//{
+//    var policy = new AuthorizationPolicyBuilder()
+//        .RequireAuthenticatedUser()
+//        .Build();
+//    options.Filters.Add(new AuthorizeFilter(policy));
+//});
+//builder.Services.AddRazorPages()
+//    .AddMicrosoftIdentityUI();
 
 
 
@@ -36,24 +37,26 @@ var app = builder.Build();
 
 
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+//// Configure the HTTP request pipeline.
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseExceptionHandler("/Home/Error");
+//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+//    app.UseHsts();
+//}
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+//app.UseHttpsRedirection();
+//app.UseStaticFiles();
 
-app.UseRouting();
+//app.UseRouting();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+//app.MapRazorPages();
 
 app.Run();

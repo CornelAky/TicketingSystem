@@ -6,8 +6,6 @@ namespace TicketingSystem.Models
     {
         public long StatusId { get; set; }
         public string StatusName { get; set; }
-
-        [NotMapped]
         public List<Ticket> Tickets { get; set; }
     }
 }
