@@ -9,6 +9,6 @@ namespace TicketingSystem.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public int Status { get; set; } // Enum
-        public User User { get; set; }
+        public virtual User User { get; set; }
     }
 }

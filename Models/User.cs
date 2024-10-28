@@ -3,13 +3,14 @@
     public class User
     {
         public long UserID { get; set; }
+        public string FullName { get; set; }
         public string AzureID{ get; set; }
         public eRole Role{ get; set; }
-        public List<Ticket> CreatedTickets { get; set; }
-        public List<Ticket> AssignedTickets { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<Notification> Notifications { get; set; }
-        public List<Subscription> Subscriptions { get; set; }
+        public virtual List<Ticket> CreatedTickets { get; set; }
+        public virtual List<Ticket> AssignedTickets { get; set; }
+        public virtual List<Comment> Comments { get; set; }
+        public virtual List<Notification> Notifications { get; set; }
+        public virtual List<Subscription> Subscriptions { get; set; }
         public enum eRole
         {
             None = 0,   

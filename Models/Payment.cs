@@ -4,7 +4,7 @@
     {
         public long PaymentId { get; set; }
         public long SubscriptionId { get; set; }
-        public Subscription Subscription { get; set; }
+        public virtual Subscription Subscription { get; set; }
         public double Amount { get; set; }
         public DateTime PaymentDate { get; set; }
     }

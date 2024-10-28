@@ -117,19 +117,6 @@ namespace TicketingSystem.Controllers
                     _context.Update(plan);
                     await _context.SaveChangesAsync();
                 }
-                //catch (DbUpdateException ex)
-                //{
-                //    // Verificăm dacă eroarea este legată de unicitatea lui PlanName
-                //    if (ex.InnerException != null && ex.InnerException.Message.Contains("IX_Plan_PlanName"))
-                //    {
-                //        ModelState.AddModelError("PlanName", "The plan name must be unique. Please choose a different name.");
-                //    }
-                //    else
-                //    {
-                //        // Poți trata alte excepții de la baza de date aici
-                //        ModelState.AddModelError(string.Empty, "An error occurred while saving the plan. Please try again.");
-                //    }
-                //}
                 catch (DbUpdateConcurrencyException)
                 {
 
@@ -142,6 +129,21 @@ namespace TicketingSystem.Controllers
                         throw;
                     }
                 }
+                catch (DbUpdateException ex)
+                {
+                    // Verificăm dacă eroarea este legată de unicitatea lui PlanName
+                    if (ex.InnerException != null && ex.InnerException.Message.Contains("IX_Plan_PlanName"))
+                    {
+                        ModelState.AddModelError("PlanName", "The plan name must be unique. Please choose a different name.");
+                    }
+                    else
+                    {
+                        // Poți trata alte excepții de la baza de date aici
+                        ModelState.AddModelError(string.Empty, "An error occurred while saving the plan. Please try again.");
+                    }
+                    return View(plan);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(plan);

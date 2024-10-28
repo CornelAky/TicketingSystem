@@ -9,6 +9,6 @@ namespace TicketingSystem.Models
         public string DocumentName { get; set; }
         public string Base64 { get; set; }
         public string ContentType { get; set; }
-        public Ticket Ticket { get; set; }
+        public virtual Ticket Ticket { get; set; }
     }
 }

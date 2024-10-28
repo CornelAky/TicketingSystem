@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 using TicketingSystem.Models;
+using TicketingSystem.Handler;
 
 namespace TicketingSystem.Controllers
 {
@@ -11,17 +12,21 @@ namespace TicketingSystem.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly CurrentUserService _currentUserService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, CurrentUserService currentUserService)
         {
             _logger = logger;
+            _currentUserService = currentUserService;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();

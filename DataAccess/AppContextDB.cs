@@ -9,6 +9,12 @@ namespace TicketingSystem.DataAccess
         {
 
         }
+        // Activarea Lazy Loading prin utilizarea proxies
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseLazyLoadingProxies();  // Activăm Lazy Loading
+        }
         public DbSet<User> Users { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketStatus> TicketStatuses { get; set; }

@@ -9,7 +9,7 @@ namespace TicketingSystem.Models
         public long UserId { get; set; }
         public string CommentText { get; set; }
         public DateTime CreatedDate { get; set; }
-        public User User { get; set; }
-        public Ticket Ticket { get; set; }
+        public virtual User User { get; set; }
+        public virtual Ticket Ticket { get; set; }
     }
 }

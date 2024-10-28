@@ -17,10 +17,10 @@ namespace TicketingSystem.Migrations
                 {
                     PlanId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PlanName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlanName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     MaxTicketsPerMonth = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,6 +46,7 @@ namespace TicketingSystem.Migrations
                 {
                     UserID = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AzureID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false)
                 },
@@ -237,6 +238,12 @@ namespace TicketingSystem.Migrations
                 name: "IX_Payments_SubscriptionId",
                 table: "Payments",
                 column: "SubscriptionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Plan_PlanName",
+                table: "Plans",
+                column: "PlanName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_PlanId",
