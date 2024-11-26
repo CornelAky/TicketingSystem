@@ -12,8 +12,8 @@ using TicketingSystem.DataAccess;
 namespace TicketingSystem.Migrations
 {
     [DbContext(typeof(AppContextDB))]
-    [Migration("20241024164150_initDB")]
-    partial class initDB
+    [Migration("20241121171631_intDB")]
+    partial class intDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -273,7 +273,7 @@ namespace TicketingSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("UserID"));
 
-                    b.Property<string>("AzureID")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -281,8 +281,13 @@ namespace TicketingSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserID");
 
