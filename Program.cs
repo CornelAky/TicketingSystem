@@ -4,12 +4,17 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 using TicketingSystem.DataAccess;
+using TicketingSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurare DbContext
 builder.Services.AddDbContext<AppContextDB>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+builder.Services.AddScoped<ITicketStatusService, TicketStatusService>();
+builder.Services.AddScoped<IPlanService, PlanService>();
 
 // Configurare autentificare personalizată
 builder.Services.AddAuthentication("CustomCookieAuth")

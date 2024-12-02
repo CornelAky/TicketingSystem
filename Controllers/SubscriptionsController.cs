@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,8 +23,20 @@ namespace TicketingSystem.Controllers
         // GET: Subscriptions
         public async Task<IActionResult> Index()
         {
-            var appContextDB = _context.Subscriptions.Include(s => s.Plan).Include(s => s.User);
-            return View(await appContextDB.ToListAsync());
+            var userRoles = User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+            if (userRoles.Contains("Admin") || userRoles.Contains("Support"))
+            {
+                var appContextDB = _context.Subscriptions.Include(s => s.Plan).Include(s => s.User);
+                return View(await appContextDB.ToListAsync());
+                
+            }
+            else
+            {
+                var appContextDB = _context.Subscriptions.Include(s => s.Plan).Include(s => s.User).Where(x=>x.UserId==GetCurrentUserId());
+                return View(await appContextDB.ToListAsync());
+            }
+
+
         }
 
         // GET: Subscriptions/Details/5
@@ -50,7 +63,15 @@ namespace TicketingSystem.Controllers
         public IActionResult Create()
         {
             ViewData["PlanId"] = new SelectList(_context.Plans, "PlanId", "PlanName");
-            ViewData["UserId"] = new SelectList(_context.Users, "UserID", "FullName");
+            var userRoles = User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+            if (userRoles.Contains("Admin") || userRoles.Contains("Support"))
+            {
+                ViewData["UserId"] = new SelectList(_context.Users, "UserID", "FullName");
+            }
+            else
+            {
+                ViewData["UserId"] = new SelectList(_context.Users.Where(x => x.UserID == GetCurrentUserId()), "UserID", "FullName");
+            }
             return View();
         }
 
@@ -68,10 +89,33 @@ namespace TicketingSystem.Controllers
             {
                 _context.Add(subscription);
                 await _context.SaveChangesAsync();
+                //Adauga la facturi
+                Plan plan = _context.Plans.Where(x => x.PlanId == subscription.PlanId).FirstOrDefault();
+                if(plan!=null)
+                {
+                    Payment payment = new Payment 
+                    { 
+                        Amount=plan.Price,
+                        SubscriptionId= subscription.SubscriptionId,
+                        PaymentDate=DateTime.Now,
+                    };
+                    _context.Add(payment);
+                    await _context.SaveChangesAsync();
+
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PlanId"] = new SelectList(_context.Plans, "PlanId", "PlanName", subscription.PlanId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserID", "FullName", subscription.UserId);
+            var userRoles = User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+            if (userRoles.Contains("Admin") || userRoles.Contains("Support"))
+            {
+                ViewData["UserId"] = new SelectList(_context.Users, "UserID", "FullName");
+            }
+            else
+            {
+                ViewData["UserId"] = new SelectList(_context.Users.Where(x => x.UserID == GetCurrentUserId()), "UserID", "FullName");
+            }
             return View(subscription);
         }
 
@@ -129,7 +173,7 @@ namespace TicketingSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PlanId"] = new SelectList(_context.Plans, "PlanId", "PlanName", subscription.PlanId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserID", "FullName", subscription.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(x=>x.UserID== GetCurrentUserId()), "UserID", "FullName", subscription.UserId);
             return View(subscription);
         }
 
@@ -171,6 +215,11 @@ namespace TicketingSystem.Controllers
         private bool SubscriptionExists(long id)
         {
             return _context.Subscriptions.Any(e => e.SubscriptionId == id);
+        }
+
+        private long GetCurrentUserId()
+        {
+            return long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
         }
     }
 }

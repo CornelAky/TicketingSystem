@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    var userRoles = User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
 }
 
 <h1>Index</h1>
@@ -49,9 +50,16 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.SubscriptionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SubscriptionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SubscriptionId">Delete</a>
+
+                @if (userRoles.Contains("Admin") || userRoles.Contains("Support"))
+                {
+
+                    <a asp-action="Edit" asp-route-id="@item.SubscriptionId">Edit</a> 
+                    <a asp-action="Details" asp-route-id="@item.SubscriptionId">Details</a> 
+                    <a asp-action="Delete" asp-route-id="@item.SubscriptionId">Delete</a>
+                }
+
+
             </td>
         </tr>
 }

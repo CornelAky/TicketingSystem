@@ -12,8 +12,8 @@ using TicketingSystem.DataAccess;
 namespace TicketingSystem.Migrations
 {
     [DbContext(typeof(AppContextDB))]
-    [Migration("20241121171631_intDB")]
-    partial class intDB
+    [Migration("20241202103221_initDB")]
+    partial class initDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TicketingSystem.DataAccess;
+
 using TicketingSystem.Models;
+using TicketingSystem.Services;
 
 namespace TicketingSystem.Controllers
 {
     public class TicketStatusController : Controller
     {
-        private readonly AppContextDB _context;
+        private readonly ITicketStatusService _service;
 
-        public TicketStatusController(AppContextDB context)
+        public TicketStatusController(ITicketStatusService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: TicketStatus
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TicketStatuses.ToListAsync());
+            var statuses = await _service.GetAllAsync();
+            return View(statuses);
         }
 
         // GET: TicketStatus/Details/5
@@ -33,8 +30,7 @@ namespace TicketingSystem.Controllers
                 return NotFound();
             }
 
-            var ticketStatus = await _context.TicketStatuses
-                .FirstOrDefaultAsync(m => m.StatusId == id);
+            var ticketStatus = await _service.GetByIdAsync(id.Value);
             if (ticketStatus == null)
             {
                 return NotFound();
@@ -50,8 +46,6 @@ namespace TicketingSystem.Controllers
         }
 
         // POST: TicketStatus/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StatusId,StatusName")] TicketStatus ticketStatus)
@@ -59,8 +53,7 @@ namespace TicketingSystem.Controllers
             ModelState.Remove("Tickets");
             if (ModelState.IsValid)
             {
-                _context.Add(ticketStatus);
-                await _context.SaveChangesAsync();
+                await _service.CreateAsync(ticketStatus);
                 return RedirectToAction(nameof(Index));
             }
             return View(ticketStatus);
@@ -74,7 +67,7 @@ namespace TicketingSystem.Controllers
                 return NotFound();
             }
 
-            var ticketStatus = await _context.TicketStatuses.FindAsync(id);
+            var ticketStatus = await _service.GetByIdAsync(id.Value);
             if (ticketStatus == null)
             {
                 return NotFound();
@@ -83,12 +76,11 @@ namespace TicketingSystem.Controllers
         }
 
         // POST: TicketStatus/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("StatusId,StatusName")] TicketStatus ticketStatus)
         {
+            ModelState.Remove("Tickets");
             if (id != ticketStatus.StatusId)
             {
                 return NotFound();
@@ -98,12 +90,11 @@ namespace TicketingSystem.Controllers
             {
                 try
                 {
-                    _context.Update(ticketStatus);
-                    await _context.SaveChangesAsync();
+                    await _service.UpdateAsync(ticketStatus);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TicketStatusExists(ticketStatus.StatusId))
+                    if (!_service.TicketStatusExists(ticketStatus.StatusId))
                     {
                         return NotFound();
                     }
@@ -125,8 +116,7 @@ namespace TicketingSystem.Controllers
                 return NotFound();
             }
 
-            var ticketStatus = await _context.TicketStatuses
-                .FirstOrDefaultAsync(m => m.StatusId == id);
+            var ticketStatus = await _service.GetByIdAsync(id.Value);
             if (ticketStatus == null)
             {
                 return NotFound();
@@ -140,19 +130,8 @@ namespace TicketingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var ticketStatus = await _context.TicketStatuses.FindAsync(id);
-            if (ticketStatus != null)
-            {
-                _context.TicketStatuses.Remove(ticketStatus);
-            }
-
-            await _context.SaveChangesAsync();
+            await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TicketStatusExists(long id)
-        {
-            return _context.TicketStatuses.Any(e => e.StatusId == id);
         }
     }
 }

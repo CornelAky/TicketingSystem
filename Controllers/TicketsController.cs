@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TicketingSystem.DataAccess;
 using TicketingSystem.Models;
+using TicketingSystem.Models.ViewModel;
 
 namespace TicketingSystem.Controllers
 {
@@ -212,13 +213,19 @@ namespace TicketingSystem.Controllers
             }
 
             // Filtrăm ticket-urile pentru utilizatorul curent
-            var myTickets = _context.Tickets
+            List<Ticket> myTickets = _context.Tickets
                 .Where(t => t.CreatorBy.UserID.ToString() == userId )
                 .Include(t => t.AssignedTo)
                 .Include(t => t.CreatorBy)
-                .Include(t => t.Status);
+                .Include(t => t.Status).ToList();
 
-            return View(await myTickets.ToListAsync());
+            TicketViewModel model = new TicketViewModel
+            {
+                tickets = myTickets,
+                ticketsAvailable = ticketsAvailable()
+            };
+
+            return View(model);
         }
 
         [Authorize(Roles = "Support,Admin")]
@@ -320,7 +327,34 @@ namespace TicketingSystem.Controllers
         }
 
 
+        private int ticketsAvailable()
+        {
 
+            //Daca are vreun abonament actic
+            DateTime now = DateTime.Now;
+            List<Subscription> subscriptionsAll = _context.Subscriptions.Include(x => x.Plan).ToList();
+            List<Subscription> subscriptions = _context.Subscriptions.Include(x=>x.Plan).Where( x => x.UserId == GetCurrentUserId()  
+                                                                           && x.StartDate<=now  
+                                                                           && x.EndDate>= now 
+                                                                           && x.IsActive).ToList();
+            if (subscriptions.Count == 0)
+                return 0;
+
+            int credit = subscriptions.Sum(x => x.Plan.MaxTicketsPerMonth);
+
+            if (credit <= 0)
+                return 0;
+
+            DateTime minDate = subscriptions.Min(x => x.StartDate);
+            DateTime maxDate = subscriptions.Max(x => x.EndDate);
+
+            int creditUsed = _context.Tickets
+                .Where(t => t.CreatedById == GetCurrentUserId()
+                            && minDate <= t.CreatedDate
+                            && maxDate >= t.CreatedDate).Count();
+
+            return (credit - creditUsed) < 0 ? 0 : credit - creditUsed; 
+        }
 
         private bool TicketExists(long id)
         {

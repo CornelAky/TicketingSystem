@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,8 +23,24 @@ namespace TicketingSystem.Controllers
         // GET: Payments
         public async Task<IActionResult> Index()
         {
-            var appContextDB = _context.Payments.Include(p => p.Subscription);
-            return View(await appContextDB.ToListAsync());
+
+
+
+            List<Payment> model = await _context.Payments
+                                        .Include(p => p.Subscription)
+                                            .ThenInclude(s => s.Plan) 
+                                        .Include(p => p.Subscription)
+                                            .ThenInclude(s => s.User) 
+                                        .ToListAsync();
+
+            List<Plan> plans = await  _context.Plans.ToListAsync();
+            List<User> users = await  _context.Users.ToListAsync();
+            model.ForEach(x =>
+            {
+                x.PlanName = plans.FirstOrDefault(y => x.Subscription.PlanId == y.PlanId)?.PlanName;
+                x.UserName = users.FirstOrDefault(y => x.Subscription.UserId == y.UserID)?.FullName;
+            });
+            return View(model);
         }
 
         // GET: Payments/Details/5

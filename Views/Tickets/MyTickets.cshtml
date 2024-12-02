@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TicketingSystem.Models.Ticket>
+﻿@model TicketingSystem.Models.ViewModel.TicketViewModel
 
 @{
     ViewData["Title"] = "Tickets";
@@ -8,25 +8,33 @@
     <h1 class="mb-4">Tickets</h1>
 
     <div class="mb-3">
-        <a asp-action="Create" class="btn btn-outline-primary">Create New Ticket</a>
+        @if (Model.hasCredit)
+        {
+            <a asp-action="Create" class="btn btn-outline-primary">Create New Ticket</a>
+            <p class="text-success">You have @Model.ticketsAvailable tickets left.</p>
+        }
+        else
+        {
+             <p class="text-danger">You have no tickets available.</p>
+        }
     </div>
 
     <table class="table table-hover align-middle">
         <thead class="table-light">
             <tr>
-                <th>@Html.DisplayNameFor(model => model.Title)</th>
-                <th>@Html.DisplayNameFor(model => model.Description)</th>
-                <th>@Html.DisplayNameFor(model => model.CreatorBy)</th>
-                <th>@Html.DisplayNameFor(model => model.AssignedTo)</th>
-                <th>@Html.DisplayNameFor(model => model.Status)</th>
-                <th>@Html.DisplayNameFor(model => model.Priority)</th>
-                <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
-                <th>@Html.DisplayNameFor(model => model.ClosedDate)</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>CreatorBy</th>
+                <th>AssignedTo)</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>CreatedDate</th>
+                <th>ClosedDate</th>
                 <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.tickets)
             {
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.Title)</td>
