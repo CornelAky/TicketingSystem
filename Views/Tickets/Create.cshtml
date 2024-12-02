@@ -1,62 +1,51 @@
 ﻿@model TicketingSystem.Models.Ticket
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Ticket";
 }
 
-<h1>Create</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Create a New Ticket</h1>
 
-<h4>Ticket</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedById" class="control-label"></label>
-                <select asp-for="CreatedById" class ="form-control" asp-items="ViewBag.CreatedById"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="AssignedToId" class="control-label"></label>
-                <select asp-for="AssignedToId" class ="form-control" asp-items="ViewBag.AssignedToId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusId" class="control-label"></label>
-                <select asp-for="StatusId" class ="form-control" asp-items="ViewBag.StatusId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Priority" class="control-label"></label>
-                <select asp-for="Priority" class="form-control" asp-items="ViewBag.Priority"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClosedDate" class="control-label"></label>
-                <input asp-for="ClosedDate" class="form-control" />
-                <span asp-validation-for="ClosedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <!-- Title -->
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="Enter the ticket title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter a detailed description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <!-- Priority -->
+                <div class="mb-3">
+                    <label asp-for="Priority" class="form-label">Priority</label>
+                    <select asp-for="Priority" class="form-select" asp-items="ViewBag.Priority">
+                        <option value="">Select Priority</option>
+                    </select>
+                    <span asp-validation-for="Priority" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Submit Ticket</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
 </div>
 
 @section Scripts {

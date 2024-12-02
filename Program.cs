@@ -19,6 +19,9 @@ builder.Services.AddAuthentication("CustomCookieAuth")
         options.AccessDeniedPath = "/Auth/AccessDenied";
     });
 
+
+builder.Services.AddAuthorization();
+
 // Aplicare politică globală de autorizare
 builder.Services.AddControllersWithViews(options =>
 {

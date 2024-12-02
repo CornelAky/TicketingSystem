@@ -12,12 +12,13 @@
         public virtual List<Comment> Comments { get; set; }
         public virtual List<Notification> Notifications { get; set; }
         public virtual List<Subscription> Subscriptions { get; set; }
-        public enum eRole
+
+        public enum eRoles
         {
-            None = 0,   
-            Administator = 1,   
-            Agent = 2,   
-            Client = 3,   
+            Admin,
+            User,
+            Manager,
+            Support
         }
     }
 }

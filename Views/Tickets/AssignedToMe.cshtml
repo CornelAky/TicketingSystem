@@ -1,0 +1,43 @@
+﻿@model IEnumerable<TicketingSystem.Models.Ticket>
+
+@{
+    ViewData["Title"] = "Tickets Assigned to Me";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Tickets Assigned to Me</h1>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Title)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.Status.StatusName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Priority)</th>
+                    <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.ClosedDate)</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Status.StatusName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Priority)</td>
+                        <td>@item.CreatedDate.ToString("g")</td>
+                        <td>@item.ClosedDate?.ToString("g")</td>
+                        <td class="text-center">
+                            <a asp-action="DetailsWithComments" asp-route-id="@item.TicketId" class="btn btn-primary btn-sm">
+                                <i class="bi bi-chat-dots"></i> View Details
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>    
+    </div>
+</div>

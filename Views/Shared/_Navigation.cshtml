@@ -10,20 +10,53 @@
 
     @if (User.Identity?.IsAuthenticated == true)
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Plans" asp-action="Index">Plans</a>
+        <!-- Dropdown Tickets -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-dark" href="#" id="ticketsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Tickets
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="ticketsDropdown">
+                @if (User.IsInRole("Admin"))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="Index">All Tickets</a>
+                    </li>
+                }
+                @if (User.IsInRole("Support") || User.IsInRole("Admin"))
+                {
+                    <li >
+                        <a class="dropdown-item" asp-controller="Tickets" asp-action="AssignedToMe">My Assigned Tickets</a>
+                    </li>
+                }
+
+                <li>
+                    <a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="MyTickets">My Tickets</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="ProcessedTickets">Processed Tickets</a>
+                </li>
+
+            </ul>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Subscriptions" asp-action="Index">Subscription</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Payments" asp-action="Index">Payments</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="TicketStatus" asp-action="Index">Ticket Status</a>
-        </li>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Plans" asp-action="Index">Plans</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Subscriptions" asp-action="Index">Subscriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Payments" asp-action="Index">Payments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="TicketStatus" asp-action="Index">Ticket Status</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="ManageRoles">Manage Roles</a>
+            </li>
+
+        }
     }
 </ul>

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<TicketingSystem.Models.User>
+@using static TicketingSystem.Models.User
+
+@{
+    ViewData["Title"] = "Manage Roles";
+    var availableRoles = ViewBag.AvailableRoles as List<string>;
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Manage Roles</h1>
+
+    <table class="table table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <form asp-action="SetRoles" asp-controller="Auth" method="post">
+                            <div class="row justify-content-center align-content-center">
+                                <div class="col-9">
+                            <input type="hidden" name="userId" value="@user.UserID" />
+                            <select name="selectedRoles" class="selectpicker" multiple data-style="btn-outline-primary" data-live-search="true" data-width="100%">
+                                @foreach (var role in availableRoles)
+                                {
+                                    if (user.Role != null && user.Role.Split(';').Contains(role))
+                                    {
+                                        <option value="@role" selected>@role</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@role">@role</option>
+                                    }
+                                }
+                            </select>
+
+                                </div>
+                                <div class="col-3">
+                            <button type="submit" class="btn btn-primary btn-sm mt-2">Save</button>
+
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(user.Role))
+                        {
+                            <span class="badge bg-info">@user.Role</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
