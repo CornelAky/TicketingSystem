@@ -1,24 +1,28 @@
 ﻿@model TicketingSystem.Models.TicketStatus
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Ticket Status Details";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Ticket Status Details</h1>
 
-<div>
-    <h4>TicketStatus</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.StatusId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Details</h5>
+            <dl class="row">
+                <dt class="col-sm-4">Status Name</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.StatusName)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Edit" asp-route-id="@Model.StatusId" class="btn btn-warning">
+            <i class="bi bi-pencil"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Back to List
+        </a>
+    </div>
 </div>

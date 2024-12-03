@@ -135,6 +135,7 @@ namespace TicketingSystem.Controllers
             {
                 Ticket existingTicket = await _context.Tickets
                     .Include(t => t.CreatorBy)
+                    .Include(t => t.AssignedTo)
                     .FirstOrDefaultAsync(t => t.TicketId == ticket.TicketId);
 
                 if (existingTicket == null)

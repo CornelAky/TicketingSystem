@@ -1,8 +1,43 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="cover-container d-flex w-100 p-3 mx-auto flex-column text-center text-white position-relative" style="background: url('/images/cover.jpg') no-repeat center center/cover; height: 44vh; width: 100%; border-radius: 15px; overflow: hidden;">
+    <!-- Layer for lightening the background -->
+    <header class="masthead mb-auto position-relative z-1 d-flex align-items-center justify-content-center h-100">
+        <div>
+            <h1 class="display-3 fw-bold">Welcome to TicketingSystem</h1>
+        </div>
+    </header>
+</div>
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <h3 class="card-title text-primary">My Tickets</h3>
+                    <p class="card-text">
+                        View and manage the tickets you have assigned for resolution. Monitor their progress and ensure they are resolved efficiently.
+                    </p>
+                    <a asp-controller="Tickets" asp-action="MyTickets" class="btn btn-primary btn-lg">
+                        <i class="bi bi-ticket-perforated"></i> Go to My Tickets
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <h3 class="card-title text-success">Subscription Plans</h3>
+                    <p class="card-text">
+                        Choose the best plan that fits your needs. Gain access to additional features and create tickets more efficiently.
+                    </p>
+                    <a asp-controller="Subscriptions" asp-action="Index" class="btn btn-success btn-lg">
+                        <i class="bi bi-box-arrow-in-up-right"></i> View Subscription Plans
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
